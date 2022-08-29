@@ -1,6 +1,5 @@
 import socket
 import cv2
-import time
 import numpy as np
 from AlphaBot import AlphaBot
 from picamera import PiCamera
@@ -13,8 +12,6 @@ def setup_app(app):
     app.camera = PiCamera()
     app.camera.resolution = (640,480)
     app.camera.framerate = 24
-    app.camera.start_preview()
-    time.sleep(2)
         
 setup_app(app)
 
@@ -29,12 +26,8 @@ def get_image():
 @app.get('/robot/set/velocity')
 def set_velocity():
     vel = request.query.value.split(',')
-    app.bot.setMotor(float(vel[0]), float(vel[1]))
-    if request.query.time != '':
-        time_run = float(request.query.time)
-        time.sleep(time_run)
-        app.bot.stop()
-    
+    app.bot.setMotor(int(vel[0]), int(vel[1]))
+
 
 s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 s.connect(('8.8.8.8',80))
